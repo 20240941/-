@@ -1,0 +1,133 @@
+#include <stdio.h>
+#include <string.h>
+
+#define PRODUCT_COUNT 5
+#define NAME_LENGTH 20
+
+typedef struct {
+    int id;
+    char name[NAME_LENGTH];
+    int price;
+    int stock;
+    int sales;
+    int totalRevenue;
+} Product;
+
+Product products[PRODUCT_COUNT] = {0};
+int productCount = 0;
+
+void addOrUpdateProduct() {
+    int id, price, stock;
+    char name[NAME_LENGTH];
+    printf("상품 ID (0~4): ");
+    scanf("%d", &id);
+
+    if (id < 0 || id >= PRODUCT_COUNT) {
+        printf("잘못된 상품 ID입니다.\n");
+        return;
+    }
+
+    printf("상품명: ");
+    scanf("%s", name);
+    printf("입고량: ");
+    scanf("%d", &stock);
+    printf("판매가격: ");
+    scanf("%d", &price);
+
+    if (products[id].id == id) {
+        printf("기존 상품이 있어 업데이트합니다.\n");
+        products[id].stock += stock;
+        products[id].price = price;
+    } else {
+        printf("새로운 상품을 추가합니다.\n");
+        products[id].id = id;
+        strcpy(products[id].name, name);
+        products[id].price = price;
+        products[id].stock = stock;
+        products[id].sales = 0;
+        products[id].totalRevenue = 0;
+        productCount++;
+    }
+}
+
+void sellProduct() {
+    int id, quantity;
+    printf("판매할 상품 ID: ");
+    scanf("%d", &id);
+
+    if (id < 0 || id >= PRODUCT_COUNT || products[id].id != id) {
+        printf("존재하지 않는 상품 ID입니다.\n");
+        return;
+    }
+
+    printf("판매 수량: ");
+    scanf("%d", &quantity);
+
+    if (quantity > products[id].stock) {
+        printf("재고 부족\n");
+    } else {
+        products[id].stock -= quantity;
+        products[id].sales += quantity;
+        products[id].totalRevenue += quantity * products[id].price;
+        printf("상품 ID %d - %s 판매 완료. 남은 재고: %d\n", id, products[id].name, products[id].stock);
+    }
+}
+
+void displayProductDetails() {
+    int id;
+    printf("상품 ID 입력: ");
+    scanf("%d", &id);
+
+    if (id < 0 || id >= PRODUCT_COUNT || products[id].id != id) {
+        printf("존재하지 않는 상품 ID입니다.\n");
+    } else {
+        printf("\n상품 ID: %d\n상품명: %s\n가격: %d\n재고: %d\n판매량: %d\n총 판매금액: %d\n",
+               products[id].id, products[id].name, products[id].price, products[id].stock, products[id].sales, products[id].totalRevenue);
+    }
+}
+
+void displayAllProductStatus() {
+    printf("\n--- 전체 상품 현황 ---\n");
+    for (int i = 0; i < PRODUCT_COUNT; i++) {
+        if (products[i].id == i) {
+            printf("상품 ID: %d, 이름: %s, 가격: %d, 재고: %d, 판매량: %d, 총 판매금액: %d\n",
+                   products[i].id, products[i].name, products[i].price, products[i].stock, products[i].sales, products[i].totalRevenue);
+        }
+    }
+}
+
+int main() {
+    int choice;
+
+    while (1) {
+        printf("\n원하는 메뉴를 선택하세요.\n");
+        printf("1. 입고\n");
+        printf("2. 판매\n");
+        printf("3. 개별현황\n");
+        printf("4. 전체현황\n");
+        printf("5. 종료\n");
+        printf("선택: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                addOrUpdateProduct();
+                break;
+            case 2:
+                sellProduct();
+                break;
+            case 3:
+                displayProductDetails();
+                break;
+            case 4:
+                displayAllProductStatus();
+                break;
+            case 5:
+                printf("프로그램을 종료합니다.\n");
+                return 0;
+            default:
+                printf("잘못된 선택입니다. 다시 선택하세요.\n");
+        }
+    }
+    return 0;
+}
