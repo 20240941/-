@@ -1,0 +1,115 @@
+#include <stdio.h>
+
+#define PRODUCT_COUNT 5
+
+int stock[PRODUCT_COUNT] = {0};  // 상품별 입고 수량
+int sales[PRODUCT_COUNT] = {0};  // 상품별 판매 수량
+
+void displayMenu() {
+    printf("\n[쇼핑몰 관리 프로그램]\n");
+    printf("원하는 메뉴를 선택하세요.(1. 입고, 2. 판매, 3. 상품현황, 4. 종료)\n> ");
+}
+
+void inputStockAll() {
+    printf("전체 상품의 입고수량을 입력하세요:\n");
+    for (int i = 0; i < PRODUCT_COUNT; i++) {
+        printf("상품 %d의 입고 수량: ", i + 1);
+        scanf("%d", &stock[i]);
+    }
+}
+
+void inputStockSingle() {
+    int productID, amount;
+    printf("상품 ID를 입력하세요 (1~%d): ", PRODUCT_COUNT);
+    scanf("%d", &productID);
+    
+    if (productID < 1 || productID > PRODUCT_COUNT) {
+        printf("잘못된 상품 ID입니다.\n");
+        return;
+    }
+    
+    printf("입고 수량을 입력하세요: ");
+    scanf("%d", &amount);
+    stock[productID - 1] += amount;
+    printf("상품 %d의 입고 수량이 %d로 설정되었습니다.\n", productID, stock[productID - 1]);
+}
+
+void inputSalesAll() {
+    printf("전체 상품의 판매 수량을 입력하세요:\n");
+    for (int i = 0; i < PRODUCT_COUNT; i++) {
+        printf("상품 %d의 판매 수량: ", i + 1);
+        scanf("%d", &sales[i]);
+    }
+}
+
+void inputSalesSingle() {
+    int productID, amount;
+    printf("상품 ID를 입력하세요 (1~%d): ", PRODUCT_COUNT);
+    scanf("%d", &productID);
+    
+    if (productID < 1 || productID > PRODUCT_COUNT) {
+        printf("잘못된 상품 ID입니다.\n");
+        return;
+    }
+    
+    printf("판매 수량을 입력하세요: ");
+    scanf("%d", &amount);
+    sales[productID - 1] += amount;
+    printf("상품 %d의 판매 수량이 %d로 설정되었습니다.\n", productID, sales[productID - 1]);
+}
+
+void displayStatus() {
+    printf("\n상품 현황:\n");
+    for (int i = 0; i < PRODUCT_COUNT; i++) {
+        int currentStock = stock[i] - sales[i];
+        printf("상품 %d - 입고 수량: %d, 판매 수량: %d, 재고 수량: %d\n", 
+               i + 1, stock[i], sales[i], currentStock);
+    }
+}
+
+int main() {
+    int choice, inputChoice;
+
+    while (1) {
+        displayMenu();
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1: 
+                printf("입고수량 입력: 전체 상품 입고 1, 개별 상품 입고 2 선택\n> ");
+                scanf("%d", &inputChoice);
+                if (inputChoice == 1) {
+                    inputStockAll();
+                } else if (inputChoice == 2) {
+                    inputStockSingle();
+                } else {
+                    printf("잘못된 선택입니다.\n");
+                }
+                break;
+
+            case 2: 
+                printf("판매수량 입력: 전체 상품 판매 1, 개별 상품 판매 2 선택\n> ");
+                scanf("%d", &inputChoice);
+                if (inputChoice == 1) {
+                    inputSalesAll();
+                } else if (inputChoice == 2) {
+                    inputSalesSingle();
+                } else {
+                    printf("잘못된 선택입니다.\n");
+                }
+                break;
+
+            case 3: 
+                displayStatus();
+                break;
+
+            case 4: 
+                printf("프로그램을 종료합니다.\n");
+                return 0;
+
+            default:
+                printf("잘못된 선택입니다. 다시 선택해주세요.\n");
+                break;
+        }
+    }
+}
