@@ -1,0 +1,65 @@
+#include <stdio.h>
+
+#define MAX_PRODUCTS 100
+
+int main() {
+    int productCount;                   
+    int stock[MAX_PRODUCTS] = {0};     
+    int sales[MAX_PRODUCTS] = {0};     
+    int totalSales = 0, totalStock = 0; 
+    int maxSales = 0, minSales = 1000; 
+    int maxSalesId = 0, minSalesId = 0; 
+    double saleRate;
+
+    printf("상품 종류(1~100) 입력: ");
+    scanf("%d", &productCount);
+
+    if (productCount < 1 || productCount > MAX_PRODUCTS) {
+        printf("상품 종류는 1에서 100 사이여야 합니다.\n");
+        return 1;
+    }
+
+    printf("각 상품의 입고 수량 입력:\n");
+    for (int i = 0; i < productCount; i++) {
+        printf("상품 %d의 입고 수량: ", i + 1);
+        scanf("%d", &stock[i]);
+        totalStock += stock[i]; // 총 입고량 계산
+    }
+
+    printf("각 상품의 판매 수량 입력:\n");
+    for (int i = 0; i < productCount; i++) {
+        printf("상품 %d의 판매 수량: ", i + 1);
+        scanf("%d", &sales[i]);
+        totalSales += sales[i]; 
+
+        if (sales[i] > maxSales) {
+            maxSales = sales[i];
+            maxSalesId = i + 1;
+        }
+        if (sales[i] < minSales) {
+            minSales = sales[i];
+            minSalesId = i + 1;
+        }
+    }
+
+    // 4. 전체 재고와 판매율 계산 및 출력
+    saleRate = (double)totalSales / totalStock * 100;
+    printf("\n재고수량: ");
+    for (int i = 0; i < productCount; i++) {
+        printf("%d", stock[i] - sales[i]);
+        if (i < productCount - 1) printf(" ");
+    }
+    printf("\n총 판매량: %d (판매율 %.2f%%)\n", totalSales, saleRate);
+
+    printf("가장 많이 판매된 상품: ID %d, 판매량 %d\n", maxSalesId, maxSales);
+    printf("가장 적게 판매된 상품: ID %d, 판매량 %d\n", minSalesId, minSales);
+
+    for (int i = 0; i < productCount; i++) {
+        int currentStock = stock[i] - sales[i];
+        if (currentStock <= 2) {
+            printf("상품 ID %d: 재고부족(%d)\n", i + 1, currentStock);
+        }
+    }
+
+    return 0;
+}
