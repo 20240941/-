@@ -1,0 +1,52 @@
+#include <stdio.h>
+
+#define MAX_PRODUCTS 100
+
+int main() {
+    int productCount;                  
+    int stock[MAX_PRODUCTS] = {0};      
+    int sales[MAX_PRODUCTS] = {0};      
+    int id, totalStock;
+
+    printf("상품 종류(1~100) 입력: ");
+    scanf("%d", &productCount);
+
+    if (productCount < 1 || productCount > MAX_PRODUCTS) {
+        printf("상품 종류는 1에서 100 사이여야 합니다.\n");
+        return 1;
+    }
+
+    printf("각 상품의 입고 수량 입력:\n");
+    for (int i = 0; i < productCount; i++) {
+        printf("상품 %d의 입고 수량: ", i + 1);
+        scanf("%d", &stock[i]);
+    }
+
+    printf("각 상품의 판매 수량 입력:\n");
+    for (int i = 0; i < productCount; i++) {
+        printf("상품 %d의 판매 수량: ", i + 1);
+        scanf("%d", &sales[i]);
+    }
+
+    printf("재고를 확인할 상품 ID 입력 (1~%d): ", productCount);
+    scanf("%d", &id);
+
+    if (id < 1 || id > productCount) {
+        printf("유효하지 않은 ID입니다.\n");
+    } else {
+        int currentStock = stock[id - 1] - sales[id - 1];
+        printf("상품 %d의 현재 재고 수량: %d\n", id, currentStock);
+    }
+
+    totalStock = 0;
+    printf("모든 상품의 재고 수량:\n");
+    for (int i = 0; i < productCount; i++) {
+        int currentStock = stock[i] - sales[i];
+        printf("상품 %d: 재고 %d\n", i + 1, currentStock);
+        totalStock += currentStock;
+    }
+
+    printf("전체 재고 수량: %d\n", totalStock);
+
+    return 0;
+}
