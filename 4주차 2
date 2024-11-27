@@ -1,0 +1,10 @@
+#include <stdio.h>
+
+int main() {
+    char massage2[5] = { 'a', 'b', 'c', 'd', '\0' };
+    char massage[5] = { 'a', 'b', 'c', '\0' };
+
+    printf("massage = %s, massage2 = %s", massage, massage2);
+
+    return 0;
+}
